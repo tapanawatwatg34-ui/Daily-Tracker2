@@ -6,7 +6,13 @@
 /* =====================================================
    DATA
 ===================================================== */
+const supabaseUrl = "YOUR_PROJECT_URL";
+const supabaseKey = "https://glyerpsfddglezsmcsos.supabase.co/rest/v1/";
 
+const supabase = window.supabase.createClient(
+  supabaseUrl,
+  supabaseKey
+);
 let healthData =
     JSON.parse(
         localStorage.getItem(
