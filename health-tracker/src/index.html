@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Little Health Tracker 🌷</title>
+
+
+    <!-- Google Fonts -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Itim&family=Kanit:wght@300;400;500;600&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- CSS -->
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+
+    <!-- Chart.js -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- =============================================
+         HEADER
+    ============================================== -->
+
+    <header class="header">
+
+        <div>
+
+            <p class="small-title">
+                MY LITTLE
+            </p>
+
+            <h1>
+                Health Tracker 🌷
+            </h1>
+
+        </div>
+
+
+        <div class="header-flower">
+            🌸
+        </div>
+
+    </header>
+
+
+
+    <!-- =============================================
+         PAGE 1 : INPUT
+    ============================================== -->
+
+    <main id="inputPage">
+
+
+        <section class="card input-card">
+
+            <div class="section-title">
+
+                <span>
+                    📝
+                </span>
+
+                <div>
+
+                    <h2>
+                        วันนี้เป็นอย่างไรบ้าง?
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <form id="healthForm">
+
+
+                <!-- DATE -->
+
+                <div class="form-group">
+
+                    <label for="date">
+                        📅 วันที่
+                    </label>
+
+                    <input
+                        type="date"
+                        id="date"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- MOOD -->
+
+                <div class="form-group">
+
+                    <label>
+                        💗 อารมณ์วันนี้
+                    </label>
+
+
+                    <div class="mood-options">
+
+
+                        <label class="mood-option sad">
+
+                            <input
+                                type="radio"
+                                name="mood"
+                                value="เศร้า"
+                                required
+                            >
+
+                            <span class="mood-face">
+                                😢
+                            </span>
+
+                            <span>
+                                เศร้า
+                            </span>
+
+                        </label>
+
+
+
+                        <label class="mood-option tired">
+
+                            <input
+                                type="radio"
+                                name="mood"
+                                value="เหนื่อย"
+                            >
+
+                            <span class="mood-face">
+                                😮‍💨
+                            </span>
+
+                            <span>
+                                เหนื่อย
+                            </span>
+
+                        </label>
+
+
+
+                        <label class="mood-option normal">
+
+                            <input
+                                type="radio"
+                                name="mood"
+                                value="เฉยๆ"
+                            >
+
+                            <span class="mood-face">
+                                😐
+                            </span>
+
+                            <span>
+                                เฉยๆ
+                            </span>
+
+                        </label>
+
+
+
+                        <label class="mood-option good">
+
+                            <input
+                                type="radio"
+                                name="mood"
+                                value="ดี"
+                            >
+
+                            <span class="mood-face">
+                                🙂
+                            </span>
+
+                            <span>
+                                ดี
+                            </span>
+
+                        </label>
+
+
+
+                        <label class="mood-option great">
+
+                            <input
+                                type="radio"
+                                name="mood"
+                                value="ดีมาก"
+                            >
+
+                            <span class="mood-face">
+                                🥰
+                            </span>
+
+                            <span>
+                                ดีมาก
+                            </span>
+
+                        </label>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- READING / EXERCISE -->
+
+                <div class="two-column">
+
+
+                    <div class="form-group">
+
+                        <label for="reading">
+                            📚 อ่านหนังสือ
+                        </label>
+
+
+                        <div class="input-with-unit">
+
+                            <input
+                                type="number"
+                                id="reading"
+                                min="0"
+                                placeholder="0"
+                                required
+                            >
+
+                            <span>
+                                นาที
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="form-group">
+
+                        <label for="exercise">
+                            🏃 ออกกำลังกาย
+                        </label>
+
+
+                        <div class="input-with-unit">
+
+                            <input
+                                type="number"
+                                id="exercise"
+                                min="0"
+                                placeholder="0"
+                                required
+                            >
+
+                            <span>
+                                นาที
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- EXERCISE TYPE -->
+
+                <div class="form-group">
+
+                    <label for="exerciseType">
+                        🌈 ประเภทการออกกำลังกาย
+                    </label>
+
+
+                    <select id="exerciseType">
+
+                        <option value="ไม่ได้ออกกำลังกาย">
+                            ไม่ได้ออกกำลังกาย
+                        </option>
+
+                        <option value="วิ่ง">
+                            วิ่ง 🏃
+                        </option>
+
+                        <option value="โยคะ">
+                            โยคะ 🧘
+                        </option>
+
+                        <option value="เวทเทรนนิ่ง">
+                            เวทเทรนนิ่ง 🏋️
+                        </option>
+
+                        <option value="ปั่นจักรยาน">
+                            ปั่นจักรยาน 🚴
+                        </option>
+
+                        <option value="ว่ายน้ำ">
+                            ว่ายน้ำ 🏊
+                        </option>
+
+                        <option value="แบดมินตัน">
+                            แบดมินตัน 🏸
+                        </option>
+
+                        <option value="อื่น ๆ">
+                            อื่น ๆ ✨
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- CUSTOM EXERCISE -->
+
+                <div
+                    class="form-group custom-exercise-group"
+                    id="customExerciseGroup"
+                >
+
+                    <label for="customExercise">
+                        ✏️ พิมพ์ประเภทการออกกำลังกาย
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="customExercise"
+                        placeholder="เช่น เต้นแอโรบิก, บาสเกตบอล..."
+                        maxlength="50"
+                    >
+
+                </div>
+
+
+
+                <!-- SCORE -->
+
+                <div class="form-group">
+
+                    <label for="score">
+
+                        ⭐ คะแนนที่ให้ตัวเองวันนี้
+
+                        <strong id="scoreValue">
+                            5
+                        </strong>
+
+                        /10
+
+                    </label>
+
+
+                    <input
+                        type="range"
+                        id="score"
+                        min="1"
+                        max="10"
+                        value="5"
+                    >
+
+
+                    <div class="score-labels">
+
+                        <span>
+                            วันนี้ไม่ค่อยโอเค 🥺
+                        </span>
+
+                        <span>
+                            ทำได้ดีมาก! 🌟
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- BUTTON -->
+
+                <button
+                    type="submit"
+                    class="save-button"
+                >
+                    บันทึกวันนี้ 💕
+                </button>
+
+
+            </form>
+
+        </section>
+
+
+
+        <!-- =============================================
+             AFTER SAVE
+        ============================================== -->
+
+        <section
+            id="savedMessage"
+            class="saved-message"
+        >
+
+            <div class="success-icon">
+                ✨
+            </div>
+
+
+            <div>
+
+                <h2>
+                    บันทึกเรียบร้อยแล้ว! 💗
+                </h2>
+
+                <p>
+                    พร้อมดูผลสุขภาพของคุณแล้ว
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="showResultsButton"
+                class="result-button"
+            >
+                ดูผลสุขภาพของฉัน ✨
+            </button>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =============================================
+         PAGE 2 : RESULTS
+    ============================================== -->
+
+    <main
+        id="resultsPage"
+        class="hidden"
+    >
+
+
+        <!-- RESULT HEADER -->
+
+        <section class="result-header">
+
+            <button
+                id="backToInputButton"
+                class="back-button"
+            >
+                ← กลับไปบันทึกข้อมูล
+            </button>
+
+
+            <div>
+
+                <p class="small-title">
+                    MY HEALTH
+                </p>
+
+                <h2>
+                    ผลสุขภาพของฉัน 🌷
+                </h2>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =============================================
+             MOOD CALENDAR
+        ============================================== -->
+
+        <section class="card calendar-card compact-calendar">
+
+            <div class="section-title">
+
+                <span>
+                    🗓️
+                </span>
+
+                <div>
+
+                    <h2>
+                        ปฏิทินอารมณ์
+                    </h2>
+
+                    <p>
+                        วันที่มีข้อมูลจะแสดงเป็นสีตามอารมณ์
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="calendar-header">
+
+                <button
+                    type="button"
+                    class="calendar-nav"
+                    id="prevMonth"
+                >
+                    ‹
+                </button>
+
+
+                <h3 id="calendarTitle">
+                    -
+                </h3>
+
+
+                <button
+                    type="button"
+                    class="calendar-nav"
+                    id="nextMonth"
+                >
+                    ›
+                </button>
+
+            </div>
+
+
+
+            <div class="calendar-weekdays">
+
+                <div>อา</div>
+                <div>จ</div>
+                <div>อ</div>
+                <div>พ</div>
+                <div>พฤ</div>
+                <div>ศ</div>
+                <div>ส</div>
+
+            </div>
+
+
+            <div
+                id="calendarDays"
+                class="calendar-days"
+            ></div>
+
+
+            <div class="calendar-legend">
+
+                <span>
+                    <i class="legend-color sad-color"></i>
+                    เศร้า
+                </span>
+
+                <span>
+                    <i class="legend-color tired-color"></i>
+                    เหนื่อย
+                </span>
+
+                <span>
+                    <i class="legend-color normal-color"></i>
+                    เฉยๆ
+                </span>
+
+                <span>
+                    <i class="legend-color good-color"></i>
+                    ดี
+                </span>
+
+                <span>
+                    <i class="legend-color great-color"></i>
+                    ดีมาก
+                </span>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =============================================
+             MOOD TRACKER
+        ============================================== -->
+
+        <section class="card">
+
+            <div class="section-title">
+
+                <span>
+                    💡
+                </span>
+
+                <div>
+
+                    <h2>
+                        Mood Tracker
+                    </h2>
+
+                    <p>
+                        หลอดไฟอารมณ์ในแต่ละวันที่บันทึก
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="moodTracker"
+                class="mood-tracker"
+            ></div>
+
+        </section>
+
+
+
+        <!-- =============================================
+             CHARTS
+        ============================================== -->
+
+        <section class="charts-grid">
+
+
+            <div class="card chart-card">
+
+                <div class="section-title">
+
+                    <span>
+                        📊
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            กิจกรรมของฉัน
+                        </h2>
+
+                        <p>
+                            อ่านหนังสือและออกกำลังกาย
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="chart-wrapper">
+
+                    <canvas
+                        id="activityChart"
+                    ></canvas>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="card chart-card">
+
+                <div class="section-title">
+
+                    <span>
+                        ⭐
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            คะแนนของฉัน
+                        </h2>
+
+                        <p>
+                            คะแนนที่ให้ตัวเองในแต่ละวัน
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="chart-wrapper">
+
+                    <canvas
+                        id="scoreChart"
+                    ></canvas>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =============================================
+             HISTORY
+        ============================================== -->
+
+        <section class="card">
+
+            <div class="section-title">
+
+                <span>
+                    📖
+                </span>
+
+                <div>
+
+                    <h2>
+                        บันทึกของฉัน
+                    </h2>
+
+                    <p>
+                        ข้อมูลที่บันทึกไว้ทั้งหมด
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="historyList"
+                class="history-list"
+            ></div>
+
+        </section>
+
+
+
+        <!-- CLEAR ALL -->
+
+        <button
+            type="button"
+            id="clearAllButton"
+            class="clear-button"
+        >
+            🗑️ ล้างข้อมูลทั้งหมด
+        </button>
+
+
+    </main>
+
+
+
+    <footer>
+        Made with 💗 for taking care of yourself
+    </footer>
+
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
