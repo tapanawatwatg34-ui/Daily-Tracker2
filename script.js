@@ -9,7 +9,9 @@
 const supabaseUrl = "https://jdestfitkftlcswkugbi.supabase.co";
 const supabaseKey = "sb_publishable_Ll0WBClWb5OKYjcoBi6-4w_z7bV3qa3";
 
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+// เปลี่ยนเป็น supabaseClient เพื่อไม่ให้ชื่อชนกับ window.supabase
+const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
 let healthData =
     JSON.parse(
         localStorage.getItem(
@@ -137,67 +139,33 @@ const nextMonthButton =
 const moodConfig = {
 
     "เศร้า": {
-
         emoji: "😢",
-
-        bulbClass:
-            "bulb-sad",
-
-        calendarClass:
-            "mood-sad"
-
+        bulbClass: "bulb-sad",
+        calendarClass: "mood-sad"
     },
-
 
     "เหนื่อย": {
-
         emoji: "😮‍💨",
-
-        bulbClass:
-            "bulb-tired",
-
-        calendarClass:
-            "mood-tired"
-
+        bulbClass: "bulb-tired",
+        calendarClass: "mood-tired"
     },
-
 
     "เฉยๆ": {
-
         emoji: "😐",
-
-        bulbClass:
-            "bulb-normal",
-
-        calendarClass:
-            "mood-normal"
-
+        bulbClass: "bulb-normal",
+        calendarClass: "mood-normal"
     },
-
 
     "ดี": {
-
         emoji: "🙂",
-
-        bulbClass:
-            "bulb-good",
-
-        calendarClass:
-            "mood-good"
-
+        bulbClass: "bulb-good",
+        calendarClass: "mood-good"
     },
 
-
     "ดีมาก": {
-
         emoji: "🥰",
-
-        bulbClass:
-            "bulb-great",
-
-        calendarClass:
-            "mood-great"
-
+        bulbClass: "bulb-great",
+        calendarClass: "mood-great"
     }
 
 };
@@ -209,20 +177,9 @@ const moodConfig = {
 ===================================================== */
 
 const thaiMonths = [
-
-    "มกราคม",
-    "กุมภาพันธ์",
-    "มีนาคม",
-    "เมษายน",
-    "พฤษภาคม",
-    "มิถุนายน",
-    "กรกฎาคม",
-    "สิงหาคม",
-    "กันยายน",
-    "ตุลาคม",
-    "พฤศจิกายน",
-    "ธันวาคม"
-
+    "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน",
+    "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม",
+    "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
 ];
 
 
@@ -231,14 +188,9 @@ const thaiMonths = [
    CALENDAR STATE
 ===================================================== */
 
-const now =
-    new Date();
-
-let calendarYear =
-    now.getFullYear();
-
-let calendarMonth =
-    now.getMonth();
+const now = new Date();
+let calendarYear = now.getFullYear();
+let calendarMonth = now.getMonth();
 
 
 
@@ -249,10 +201,7 @@ let calendarMonth =
 scoreInput.addEventListener(
     "input",
     () => {
-
-        scoreValue.textContent =
-            scoreInput.value;
-
+        scoreValue.textContent = scoreInput.value;
     }
 );
 
@@ -265,35 +214,15 @@ scoreInput.addEventListener(
 exerciseTypeInput.addEventListener(
     "change",
     () => {
-
-        if (
-            exerciseTypeInput.value ===
-            "อื่น ๆ"
-        ) {
-
-            customExerciseGroup.classList.add(
-                "show"
-            );
-
-            customExerciseInput.required =
-                true;
-
+        if (exerciseTypeInput.value === "อื่น ๆ") {
+            customExerciseGroup.classList.add("show");
+            customExerciseInput.required = true;
             customExerciseInput.focus();
-
         } else {
-
-            customExerciseGroup.classList.remove(
-                "show"
-            );
-
-            customExerciseInput.required =
-                false;
-
-            customExerciseInput.value =
-                "";
-
+            customExerciseGroup.classList.remove("show");
+            customExerciseInput.required = false;
+            customExerciseInput.value = "";
         }
-
     }
 );
 
@@ -304,29 +233,11 @@ exerciseTypeInput.addEventListener(
 ===================================================== */
 
 function getTodayString() {
-
-    const today =
-        new Date();
-
-
-    const year =
-        today.getFullYear();
-
-
-    const month =
-        String(
-            today.getMonth() + 1
-        ).padStart(2, "0");
-
-
-    const day =
-        String(
-            today.getDate()
-        ).padStart(2, "0");
-
-
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
-
 }
 
 
@@ -335,20 +246,9 @@ function getTodayString() {
    FORMAT DATE
 ===================================================== */
 
-function formatDate(
-    dateString
-) {
-
-    const [
-        year,
-        month,
-        day
-    ] =
-        dateString.split("-");
-
-
+function formatDate(dateString) {
+    const [year, month, day] = dateString.split("-");
     return `${day}/${month}/${year}`;
-
 }
 
 
@@ -358,14 +258,10 @@ function formatDate(
 ===================================================== */
 
 function saveData() {
-
     localStorage.setItem(
         "healthTrackerData",
-        JSON.stringify(
-            healthData
-        )
+        JSON.stringify(healthData)
     );
-
 }
 
 
@@ -375,14 +271,9 @@ function saveData() {
 ===================================================== */
 
 function getSortedData() {
-
     return [...healthData].sort(
-        (a, b) =>
-            a.date.localeCompare(
-                b.date
-            )
+        (a, b) => a.date.localeCompare(b.date)
     );
-
 }
 
 
@@ -391,16 +282,10 @@ function getSortedData() {
    FIND DATA BY DATE
 ===================================================== */
 
-function getDataByDate(
-    dateString
-) {
-
+function getDataByDate(dateString) {
     return healthData.find(
-        item =>
-            item.date ===
-            dateString
+        item => item.date === dateString
     );
-
 }
 
 
@@ -412,103 +297,40 @@ function getDataByDate(
 form.addEventListener(
     "submit",
     async function(event) {
-
         event.preventDefault();
 
+        const date = dateInput.value;
+        const mood = document.querySelector('input[name="mood"]:checked')?.value;
+        const reading = Number(readingInput.value);
+        const exercise = Number(exerciseInput.value);
+        const selectedExercise = exerciseTypeInput.value;
 
-        const date =
-            dateInput.value;
+        let exerciseType = selectedExercise;
 
-
-        const mood =
-            document.querySelector(
-                'input[name="mood"]:checked'
-            )?.value;
-
-
-        const reading =
-            Number(
-                readingInput.value
-            );
-
-
-        const exercise =
-            Number(
-                exerciseInput.value
-            );
-
-
-        const selectedExercise =
-            exerciseTypeInput.value;
-
-
-        /*
-           ถ้าเลือก "อื่น ๆ"
-           ใช้ข้อความที่ผู้ใช้พิมพ์
-        */
-
-        let exerciseType =
-            selectedExercise;
-
-
-        if (
-            selectedExercise ===
-            "อื่น ๆ"
-        ) {
-
-            const customValue =
-                customExerciseInput.value.trim();
-
+        if (selectedExercise === "อื่น ๆ") {
+            const customValue = customExerciseInput.value.trim();
 
             if (!customValue) {
-
-                alert(
-                    "กรุณาพิมพ์ประเภทการออกกำลังกายด้วยนะ 🌷"
-                );
-
+                alert("กรุณาพิมพ์ประเภทการออกกำลังกายด้วยนะ 🌷");
                 customExerciseInput.focus();
-
                 return;
-
             }
 
-
-            exerciseType =
-                customValue;
-
+            exerciseType = customValue;
         }
 
-
-        const score =
-            Number(
-                scoreInput.value
-            );
-
-
+        const score = Number(scoreInput.value);
 
         /* Validate */
-
         if (!date) {
-
-            alert(
-                "กรุณาเลือกวันที่ก่อนนะ 🌷"
-            );
-
+            alert("กรุณาเลือกวันที่ก่อนนะ 🌷");
             return;
-
         }
-
 
         if (!mood) {
-
-            alert(
-                "กรุณาเลือกอารมณ์ของวันนี้ก่อนนะ 💗"
-            );
-
+            alert("กรุณาเลือกอารมณ์ของวันนี้ก่อนนะ 💗");
             return;
-
         }
-
 
 
         /* =========================================
@@ -516,118 +338,62 @@ form.addEventListener(
         ========================================= */
 
         const newData = {
-
-            id:
-                Date.now(),
-
-            date:
-                date,
-
-            mood:
-                mood,
-
-            reading:
-                reading,
-
-            exercise:
-                exercise,
-
-            exerciseType:
-                exerciseType,
-
-            score:
-                score
-
+            id: Date.now(),
+            date: date,
+            mood: mood,
+            reading: reading,
+            exercise: exercise,
+            exerciseType: exerciseType,
+            score: score
         };
-
 
 
         /* =========================================
            CHECK EXISTING DATE
         ========================================= */
 
-        const existingIndex =
-            healthData.findIndex(
-                item =>
-                    item.date ===
-                    date
-            );
+        const existingIndex = healthData.findIndex(
+            item => item.date === date
+        );
 
-
-
-        if (
-            existingIndex !==
-            -1
-        ) {
-
-            newData.id =
-                healthData[
-                    existingIndex
-                ].id;
-
-
-            healthData[
-                existingIndex
-            ] =
-                newData;
-
-
-            alert(
-                "อัปเดตข้อมูลของวันนี้แล้ว 💕"
-            );
-
+        if (existingIndex !== -1) {
+            newData.id = healthData[existingIndex].id;
+            healthData[existingIndex] = newData;
+            alert("อัปเดตข้อมูลของวันนี้แล้ว 💕");
         } else {
-
-            healthData.push(
-                newData
-            );
-
-
-            alert(
-                "บันทึกข้อมูลเรียบร้อยแล้ว 🌷"
-            );
-
+            healthData.push(newData);
+            alert("บันทึกข้อมูลเรียบร้อยแล้ว 🌷");
         }
-try {
-  const { error } = await supabase
-    .from("daily_logs")
-    .upsert({
-      date: newData.date,
-      mood: newData.mood,
-      note: "",
-      reading: newData.reading,
-      exercise: newData.exercise,
-      exercise_type: newData.exerciseType,
-      score: newData.score
-    });
 
-  if (error) console.error(error);
-} catch (err) {
-  console.error(err);
-}
+        /* =========================================
+           SAVE TO SUPABASE
+        ========================================= */
+        try {
+            const { error } = await supabaseClient
+                .from("daily_logs")
+                .upsert({
+                    date: newData.date,
+                    mood: newData.mood,
+                    note: "",
+                    reading: newData.reading,
+                    exercise: newData.exercise,
+                    exercise_type: newData.exerciseType,
+                    score: newData.score
+                });
 
+            if (error) console.error("Supabase Error:", error);
+        } catch (err) {
+            console.error("Fetch Error:", err);
+        }
 
         saveData();
 
-
-
         /* Show result button */
-
-        savedMessage.classList.add(
-            "show"
-        );
-
-
+        savedMessage.classList.add("show");
         savedMessage.scrollIntoView({
-
-            behavior:
-                "smooth",
-
-            block:
-                "center"
-
+            behavior: "smooth",
+            block: "center"
         });
-
     }
 );
 
@@ -640,30 +406,13 @@ try {
 showResultsButton.addEventListener(
     "click",
     () => {
-
-        inputPage.classList.add(
-            "hidden"
-        );
-
-
-        resultsPage.classList.remove(
-            "hidden"
-        );
-
-
+        inputPage.classList.add("hidden");
+        resultsPage.classList.remove("hidden");
         renderResults();
-
-
         window.scrollTo({
-
-            top:
-                0,
-
-            behavior:
-                "smooth"
-
+            top: 0,
+            behavior: "smooth"
         });
-
     }
 );
 
@@ -676,27 +425,12 @@ showResultsButton.addEventListener(
 backToInputButton.addEventListener(
     "click",
     () => {
-
-        resultsPage.classList.add(
-            "hidden"
-        );
-
-
-        inputPage.classList.remove(
-            "hidden"
-        );
-
-
+        resultsPage.classList.add("hidden");
+        inputPage.classList.remove("hidden");
         window.scrollTo({
-
-            top:
-                0,
-
-            behavior:
-                "smooth"
-
+            top: 0,
+            behavior: "smooth"
         });
-
     }
 );
 
@@ -707,202 +441,62 @@ backToInputButton.addEventListener(
 ===================================================== */
 
 function renderCalendar() {
+    calendarDays.innerHTML = "";
+    calendarTitle.textContent = `${thaiMonths[calendarMonth]} ${calendarYear + 543}`;
 
-    calendarDays.innerHTML =
-        "";
-
-
-    calendarTitle.textContent =
-        `${thaiMonths[calendarMonth]} ${calendarYear + 543}`;
-
-
-
-    const firstDay =
-        new Date(
-            calendarYear,
-            calendarMonth,
-            1
-        ).getDay();
-
-
-    const daysInMonth =
-        new Date(
-            calendarYear,
-            calendarMonth + 1,
-            0
-        ).getDate();
-
-
+    const firstDay = new Date(calendarYear, calendarMonth, 1).getDay();
+    const daysInMonth = new Date(calendarYear, calendarMonth + 1, 0).getDate();
 
     /* Empty cells */
-
-    for (
-        let i = 0;
-        i < firstDay;
-        i++
-    ) {
-
-        const empty =
-            document.createElement(
-                "div"
-            );
-
-
-        empty.className =
-            "calendar-day empty";
-
-
-        calendarDays.appendChild(
-            empty
-        );
-
+    for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement("div");
+        empty.className = "calendar-day empty";
+        calendarDays.appendChild(empty);
     }
-
-
 
     /* Days */
+    for (let day = 1; day <= daysInMonth; day++) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "calendar-day";
 
-    for (
-        let day = 1;
-        day <= daysInMonth;
-        day++
-    ) {
+        const monthString = String(calendarMonth + 1).padStart(2, "0");
+        const dayString = String(day).padStart(2, "0");
+        const dateString = `${calendarYear}-${monthString}-${dayString}`;
 
-        const button =
-            document.createElement(
-                "button"
-            );
-
-
-        button.type =
-            "button";
-
-
-        button.className =
-            "calendar-day";
-
-
-
-        const monthString =
-            String(
-                calendarMonth + 1
-            ).padStart(2, "0");
-
-
-        const dayString =
-            String(day)
-                .padStart(2, "0");
-
-
-        const dateString =
-            `${calendarYear}-${monthString}-${dayString}`;
-
-
-
-        const data =
-            getDataByDate(
-                dateString
-            );
-
-
+        const data = getDataByDate(dateString);
 
         /* Today */
-
-        if (
-            dateString ===
-            getTodayString()
-        ) {
-
-            button.classList.add(
-                "today"
-            );
-
+        if (dateString === getTodayString()) {
+            button.classList.add("today");
         }
-
-
 
         /* Has data */
-
         if (data) {
-
-            const config =
-                moodConfig[
-                    data.mood
-                ];
-
-
-            button.classList.add(
-                "has-data"
-            );
-
-
+            const config = moodConfig[data.mood];
+            button.classList.add("has-data");
             if (config) {
-
-                button.classList.add(
-                    config.calendarClass
-                );
-
+                button.classList.add(config.calendarClass);
             }
-
-
-            button.title =
-                `บันทึกแล้ว: ${data.mood}`;
-
+            button.title = `บันทึกแล้ว: ${data.mood}`;
         }
 
-
-
-        button.textContent =
-            day;
-
-
+        button.textContent = day;
 
         /* Click date */
+        button.addEventListener("click", () => {
+            resultsPage.classList.add("hidden");
+            inputPage.classList.remove("hidden");
+            dateInput.value = dateString;
+            loadDataToForm(dateString);
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        });
 
-        button.addEventListener(
-            "click",
-            () => {
-
-                resultsPage.classList.add(
-                    "hidden"
-                );
-
-
-                inputPage.classList.remove(
-                    "hidden"
-                );
-
-
-                dateInput.value =
-                    dateString;
-
-
-                loadDataToForm(
-                    dateString
-                );
-
-
-                window.scrollTo({
-
-                    top:
-                        0,
-
-                    behavior:
-                        "smooth"
-
-                });
-
-            }
-        );
-
-
-
-        calendarDays.appendChild(
-            button
-        );
-
+        calendarDays.appendChild(button);
     }
-
 }
 
 
@@ -911,29 +505,14 @@ function renderCalendar() {
    PREVIOUS MONTH
 ===================================================== */
 
-prevMonthButton.addEventListener(
-    "click",
-    () => {
-
-        calendarMonth--;
-
-
-        if (
-            calendarMonth < 0
-        ) {
-
-            calendarMonth =
-                11;
-
-            calendarYear--;
-
-        }
-
-
-        renderCalendar();
-
+prevMonthButton.addEventListener("click", () => {
+    calendarMonth--;
+    if (calendarMonth < 0) {
+        calendarMonth = 11;
+        calendarYear--;
     }
-);
+    renderCalendar();
+});
 
 
 
@@ -941,29 +520,14 @@ prevMonthButton.addEventListener(
    NEXT MONTH
 ===================================================== */
 
-nextMonthButton.addEventListener(
-    "click",
-    () => {
-
-        calendarMonth++;
-
-
-        if (
-            calendarMonth > 11
-        ) {
-
-            calendarMonth =
-                0;
-
-            calendarYear++;
-
-        }
-
-
-        renderCalendar();
-
+nextMonthButton.addEventListener("click", () => {
+    calendarMonth++;
+    if (calendarMonth > 11) {
+        calendarMonth = 0;
+        calendarYear++;
     }
-);
+    renderCalendar();
+});
 
 
 
@@ -971,172 +535,57 @@ nextMonthButton.addEventListener(
    LOAD DATA TO FORM
 ===================================================== */
 
-function loadDataToForm(
-    dateString
-) {
-
-    const data =
-        getDataByDate(
-            dateString
-        );
-
-
+function loadDataToForm(dateString) {
+    const data = getDataByDate(dateString);
 
     /* Reset mood */
-
-    document
-        .querySelectorAll(
-            'input[name="mood"]'
-        )
-        .forEach(
-            radio => {
-
-                radio.checked =
-                    false;
-
-            }
-        );
-
-
+    document.querySelectorAll('input[name="mood"]').forEach(radio => {
+        radio.checked = false;
+    });
 
     if (!data) {
-
-        readingInput.value =
-            "";
-
-        exerciseInput.value =
-            "";
-
-        exerciseTypeInput.value =
-            "ไม่ได้ออกกำลังกาย";
-
-        customExerciseInput.value =
-            "";
-
-        customExerciseInput.required =
-            false;
-
-        customExerciseGroup.classList.remove(
-            "show"
-        );
-
-        scoreInput.value =
-            5;
-
-        scoreValue.textContent =
-            5;
-
+        readingInput.value = "";
+        exerciseInput.value = "";
+        exerciseTypeInput.value = "ไม่ได้ออกกำลังกาย";
+        customExerciseInput.value = "";
+        customExerciseInput.required = false;
+        customExerciseGroup.classList.remove("show");
+        scoreInput.value = 5;
+        scoreValue.textContent = 5;
         return;
-
     }
-
-
 
     /* Mood */
-
-    const moodRadio =
-        document.querySelector(
-            `input[name="mood"][value="${data.mood}"]`
-        );
-
-
+    const moodRadio = document.querySelector(`input[name="mood"][value="${data.mood}"]`);
     if (moodRadio) {
-
-        moodRadio.checked =
-            true;
-
+        moodRadio.checked = true;
     }
-
-
 
     /* Reading */
-
-    readingInput.value =
-        data.reading;
-
-
+    readingInput.value = data.reading;
 
     /* Exercise */
+    exerciseInput.value = data.exercise;
 
-    exerciseInput.value =
-        data.exercise;
-
-
-
-    /*
-       Exercise type
-       Check if it is one of
-       the predefined options
-    */
-
-    const options =
-        Array.from(
-            exerciseTypeInput.options
-        );
-
-
-    const predefined =
-        options.some(
-            option =>
-                option.value ===
-                data.exerciseType
-        );
-
-
+    /* Exercise type */
+    const options = Array.from(exerciseTypeInput.options);
+    const predefined = options.some(option => option.value === data.exerciseType);
 
     if (predefined) {
-
-        exerciseTypeInput.value =
-            data.exerciseType;
-
-
-        customExerciseGroup.classList.remove(
-            "show"
-        );
-
-
-        customExerciseInput.value =
-            "";
-
-
-        customExerciseInput.required =
-            false;
-
+        exerciseTypeInput.value = data.exerciseType;
+        customExerciseGroup.classList.remove("show");
+        customExerciseInput.value = "";
+        customExerciseInput.required = false;
     } else {
-
-        /*
-           ข้อมูลที่เคยพิมพ์เอง
-        */
-
-        exerciseTypeInput.value =
-            "อื่น ๆ";
-
-
-        customExerciseGroup.classList.add(
-            "show"
-        );
-
-
-        customExerciseInput.value =
-            data.exerciseType;
-
-
-        customExerciseInput.required =
-            true;
-
+        exerciseTypeInput.value = "อื่น ๆ";
+        customExerciseGroup.classList.add("show");
+        customExerciseInput.value = data.exerciseType;
+        customExerciseInput.required = true;
     }
 
-
-
     /* Score */
-
-    scoreInput.value =
-        data.score;
-
-
-    scoreValue.textContent =
-        data.score;
-
+    scoreInput.value = data.score;
+    scoreValue.textContent = data.score;
 }
 
 
@@ -1146,92 +595,37 @@ function loadDataToForm(
 ===================================================== */
 
 function renderMoodTracker() {
+    moodTracker.innerHTML = "";
+    const data = getSortedData();
 
-    moodTracker.innerHTML =
-        "";
-
-
-    const data =
-        getSortedData();
-
-
-
-    if (
-        data.length ===
-        0
-    ) {
-
+    if (data.length === 0) {
         moodTracker.innerHTML = `
-
             <div class="empty-state">
-
-                ยังไม่มีข้อมูล
-                ลองบันทึกวันแรกดูนะ 🌱
-
+                ยังไม่มีข้อมูล ลองบันทึกวันแรกดูนะ 🌱
             </div>
-
         `;
-
         return;
-
     }
 
+    data.forEach(item => {
+        const config = moodConfig[item.mood];
+        const moodDay = document.createElement("div");
+        moodDay.className = "mood-day";
 
+        moodDay.innerHTML = `
+            <div class="mood-bulb ${config ? config.bulbClass : ''}" title="${item.mood}">
+                ${config ? config.emoji : '😐'}
+            </div>
+            <div class="mood-day-date">
+                ${formatDate(item.date)}
+            </div>
+            <div class="mood-day-name">
+                ${item.mood}
+            </div>
+        `;
 
-    data.forEach(
-        item => {
-
-            const config =
-                moodConfig[
-                    item.mood
-                ];
-
-
-            const moodDay =
-                document.createElement(
-                    "div"
-                );
-
-
-            moodDay.className =
-                "mood-day";
-
-
-            moodDay.innerHTML = `
-
-                <div
-                    class="mood-bulb ${config.bulbClass}"
-                    title="${item.mood}"
-                >
-
-                    ${config.emoji}
-
-                </div>
-
-
-                <div class="mood-day-date">
-
-                    ${formatDate(item.date)}
-
-                </div>
-
-
-                <div class="mood-day-name">
-
-                    ${item.mood}
-
-                </div>
-
-            `;
-
-
-            moodTracker.appendChild(
-                moodDay
-            );
-
-        }
-    );
-
+        moodTracker.appendChild(moodDay);
+    });
 }
 
 
@@ -1241,124 +635,49 @@ function renderMoodTracker() {
 ===================================================== */
 
 function renderHistory() {
+    historyList.innerHTML = "";
+    const data = getSortedData().reverse();
 
-    historyList.innerHTML =
-        "";
-
-
-    const data =
-        getSortedData()
-            .reverse();
-
-
-
-    if (
-        data.length ===
-        0
-    ) {
-
+    if (data.length === 0) {
         historyList.innerHTML = `
-
             <div class="empty-state">
-
                 ยังไม่มีบันทึก 🌷
-
             </div>
-
         `;
-
         return;
-
     }
 
+    data.forEach(item => {
+        const config = moodConfig[item.mood];
+        const historyItem = document.createElement("div");
+        historyItem.className = "history-item";
 
+        const exerciseText = item.exercise > 0
+            ? `🏃 ${item.exercise} นาที (${item.exerciseType})`
+            : `🏃 ${item.exercise} นาที`;
 
-    data.forEach(
-        item => {
+        historyItem.innerHTML = `
+            <div class="history-date">
+                📅 ${formatDate(item.date)}
+            </div>
+            <div class="history-mood">
+                ${config ? config.emoji : '😐'} ${item.mood}
+            </div>
+            <div class="history-info">
+                📚 ${item.reading} นาที
+                <br>
+                ${exerciseText}
+            </div>
+            <div class="history-score">
+                ⭐ ${item.score}/10
+            </div>
+            <button class="delete-button" onclick="deleteData(${item.id})">
+                🗑️
+            </button>
+        `;
 
-            const config =
-                moodConfig[
-                    item.mood
-                ];
-
-
-            const historyItem =
-                document.createElement(
-                    "div"
-                );
-
-
-            historyItem.className =
-                "history-item";
-
-
-
-            const exerciseText =
-                item.exercise > 0
-                    ? `🏃 ${item.exercise} นาที (${item.exerciseType})`
-                    : `🏃 ${item.exercise} นาที`;
-
-
-
-            historyItem.innerHTML = `
-
-                <div class="history-date">
-
-                    📅
-                    ${formatDate(item.date)}
-
-                </div>
-
-
-                <div class="history-mood">
-
-                    ${config.emoji}
-
-                    ${item.mood}
-
-                </div>
-
-
-                <div class="history-info">
-
-                    📚
-                    ${item.reading}
-                    นาที
-
-                    <br>
-
-                    ${exerciseText}
-
-                </div>
-
-
-                <div class="history-score">
-
-                    ⭐
-                    ${item.score}/10
-
-                </div>
-
-
-                <button
-                    class="delete-button"
-                    onclick="deleteData(${item.id})"
-                >
-
-                    🗑️
-
-                </button>
-
-            `;
-
-
-            historyList.appendChild(
-                historyItem
-            );
-
-        }
-    );
-
+        historyList.appendChild(historyItem);
+    });
 }
 
 
@@ -1367,35 +686,13 @@ function renderHistory() {
    DELETE ONE
 ===================================================== */
 
-function deleteData(
-    id
-) {
+function deleteData(id) {
+    const confirmed = confirm("ต้องการลบข้อมูลวันนี้ใช่ไหม? 🥺");
+    if (!confirmed) return;
 
-    const confirmed =
-        confirm(
-            "ต้องการลบข้อมูลวันนี้ใช่ไหม? 🥺"
-        );
-
-
-    if (!confirmed) {
-
-        return;
-
-    }
-
-
-    healthData =
-        healthData.filter(
-            item =>
-                item.id !== id
-        );
-
-
+    healthData = healthData.filter(item => item.id !== id);
     saveData();
-
-
     renderResults();
-
 }
 
 
@@ -1404,87 +701,32 @@ function deleteData(
    CLEAR ALL
 ===================================================== */
 
-clearAllButton.addEventListener(
-    "click",
-    () => {
-
-        if (
-            healthData.length ===
-            0
-        ) {
-
-            alert(
-                "ตอนนี้ยังไม่มีข้อมูลให้ลบนะ 🌱"
-            );
-
-            return;
-
-        }
-
-
-        const confirmed =
-            confirm(
-                "ต้องการล้างข้อมูลทั้งหมดจริง ๆ ใช่ไหม?\n\nข้อมูลทั้งหมดจะถูกลบและไม่สามารถกู้คืนได้ 🥺"
-            );
-
-
-        if (!confirmed) {
-
-            return;
-
-        }
-
-
-        healthData = [];
-
-
-        localStorage.removeItem(
-            "healthTrackerData"
-        );
-
-
-        form.reset();
-
-
-        scoreInput.value =
-            5;
-
-
-        scoreValue.textContent =
-            5;
-
-
-        dateInput.value =
-            getTodayString();
-
-
-        customExerciseGroup.classList.remove(
-            "show"
-        );
-
-
-        customExerciseInput.value =
-            "";
-
-
-        customExerciseInput.required =
-            false;
-
-
-        savedMessage.classList.remove(
-            "show"
-        );
-
-
-        renderResults();
-
-
-        alert(
-            "ล้างข้อมูลทั้งหมดเรียบร้อยแล้ว 🌷"
-        );
-
+clearAllButton.addEventListener("click", () => {
+    if (healthData.length === 0) {
+        alert("ตอนนี้ยังไม่มีข้อมูลให้ลบนะ 🌱");
+        return;
     }
-);
+
+    const confirmed = confirm(
+        "ต้องการล้างข้อมูลทั้งหมดจริง ๆ ใช่ไหม?\n\nข้อมูลทั้งหมดจะถูกลบและไม่สามารถกู้คืนได้ 🥺"
+    );
+    if (!confirmed) return;
+
+    healthData = [];
+    localStorage.removeItem("healthTrackerData");
+
+    form.reset();
+    scoreInput.value = 5;
+    scoreValue.textContent = 5;
+    dateInput.value = getTodayString();
+    customExerciseGroup.classList.remove("show");
+    customExerciseInput.value = "";
+    customExerciseInput.required = false;
+    savedMessage.classList.remove("show");
+
+    renderResults();
+    alert("ล้างข้อมูลทั้งหมดเรียบร้อยแล้ว 🌷");
+});
 
 
 
@@ -1492,182 +734,57 @@ clearAllButton.addEventListener(
    ACTIVITY CHART
 ===================================================== */
 
-let activityChart =
-    null;
-
+let activityChart = null;
 
 function renderActivityChart() {
+    const canvas = document.getElementById("activityChart");
+    const data = getSortedData();
 
-    const canvas =
-        document.getElementById(
-            "activityChart"
-        );
+    const labels = data.map(item => formatDate(item.date).substring(0, 5));
+    const readingData = data.map(item => item.reading);
+    const exerciseData = data.map(item => item.exercise);
 
-
-    const data =
-        getSortedData();
-
-
-    const labels =
-        data.map(
-            item =>
-                formatDate(
-                    item.date
-                ).substring(0, 5)
-        );
-
-
-    const readingData =
-        data.map(
-            item =>
-                item.reading
-        );
-
-
-    const exerciseData =
-        data.map(
-            item =>
-                item.exercise
-        );
-
-
-    if (
-        activityChart
-    ) {
-
+    if (activityChart) {
         activityChart.destroy();
-
     }
 
-
-    activityChart =
-        new Chart(
-            canvas,
-            {
-
-                type:
-                    "bar",
-
-
-                data: {
-
-                    labels:
-                        labels,
-
-
-                    datasets: [
-
-                        {
-
-                            label:
-                                "อ่านหนังสือ 📚",
-
-                            data:
-                                readingData,
-
-                            backgroundColor:
-                                "#c8b5ed",
-
-                            borderRadius:
-                                10,
-
-                            borderSkipped:
-                                false
-
-                        },
-
-
-                        {
-
-                            label:
-                                "ออกกำลังกาย 🏃",
-
-                            data:
-                                exerciseData,
-
-                            backgroundColor:
-                                "#a9d8bd",
-
-                            borderRadius:
-                                10,
-
-                            borderSkipped:
-                                false
-
-                        }
-
-                    ]
-
+    activityChart = new Chart(canvas, {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "อ่านหนังสือ 📚",
+                    data: readingData,
+                    backgroundColor: "#c8b5ed",
+                    borderRadius: 10,
+                    borderSkipped: false
                 },
-
-
-                options: {
-
-                    responsive:
-                        true,
-
-                    maintainAspectRatio:
-                        false,
-
-
-                    plugins: {
-
-                        legend: {
-
-                            labels: {
-
-                                font: {
-
-                                    family:
-                                        "Kanit"
-
-                                }
-
-                            }
-
-                        }
-
-                    },
-
-
-                    scales: {
-
-                        x: {
-
-                            grid: {
-
-                                display:
-                                    false
-
-                            }
-
-                        },
-
-
-                        y: {
-
-                            beginAtZero:
-                                true,
-
-                            title: {
-
-                                display:
-                                    true,
-
-                                text:
-                                    "นาที"
-
-                            }
-
-                        }
-
-                    }
-
+                {
+                    label: "ออกกำลังกาย 🏃",
+                    data: exerciseData,
+                    backgroundColor: "#a9d8bd",
+                    borderRadius: 10,
+                    borderSkipped: false
                 }
-
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        font: { family: "Kanit" }
+                    }
+                }
+            },
+            scales: {
+                x: { grid: { display: false } },
+                y: { beginAtZero: true, title: { display: true, text: "นาที" } }
             }
-        );
-
+        }
+    });
 }
 
 
@@ -1676,162 +793,48 @@ function renderActivityChart() {
    SCORE CHART
 ===================================================== */
 
-let scoreChart =
-    null;
-
+let scoreChart = null;
 
 function renderScoreChart() {
+    const canvas = document.getElementById("scoreChart");
+    const data = getSortedData();
 
-    const canvas =
-        document.getElementById(
-            "scoreChart"
-        );
+    const labels = data.map(item => formatDate(item.date).substring(0, 5));
+    const scores = data.map(item => item.score);
 
-
-    const data =
-        getSortedData();
-
-
-    const labels =
-        data.map(
-            item =>
-                formatDate(
-                    item.date
-                ).substring(0, 5)
-        );
-
-
-    const scores =
-        data.map(
-            item =>
-                item.score
-        );
-
-
-    if (
-        scoreChart
-    ) {
-
+    if (scoreChart) {
         scoreChart.destroy();
-
     }
 
-
-    scoreChart =
-        new Chart(
-            canvas,
-            {
-
-                type:
-                    "line",
-
-
-                data: {
-
-                    labels:
-                        labels,
-
-
-                    datasets: [
-
-                        {
-
-                            label:
-                                "คะแนนที่ให้ตัวเอง",
-
-                            data:
-                                scores,
-
-                            borderColor:
-                                "#f09abb",
-
-                            backgroundColor:
-                                "rgba(240,154,187,.15)",
-
-                            fill:
-                                true,
-
-                            tension:
-                                .4,
-
-                            pointBackgroundColor:
-                                "#f09abb",
-
-                            pointBorderColor:
-                                "#fff",
-
-                            pointBorderWidth:
-                                3,
-
-                            pointRadius:
-                                6
-
-                        }
-
-                    ]
-
-                },
-
-
-                options: {
-
-                    responsive:
-                        true,
-
-                    maintainAspectRatio:
-                        false,
-
-
-                    plugins: {
-
-                        legend: {
-
-                            display:
-                                false
-
-                        }
-
-                    },
-
-
-                    scales: {
-
-                        x: {
-
-                            grid: {
-
-                                display:
-                                    false
-
-                            }
-
-                        },
-
-
-                        y: {
-
-                            min:
-                                1,
-
-                            max:
-                                10,
-
-                            ticks: {
-
-                                stepSize:
-                                    1
-
-                            }
-
-                        }
-
-                    }
-
+    scoreChart = new Chart(canvas, {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "คะแนนที่ให้ตัวเอง",
+                    data: scores,
+                    borderColor: "#f09abb",
+                    backgroundColor: "rgba(240,154,187,.15)",
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: "#f09abb",
+                    pointBorderColor: "#fff",
+                    pointBorderWidth: 3,
+                    pointRadius: 6
                 }
-
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { display: false } },
+                y: { min: 1, max: 10, ticks: { stepSize: 1 } }
             }
-        );
-
+        }
+    });
 }
 
 
@@ -1841,17 +844,11 @@ function renderScoreChart() {
 ===================================================== */
 
 function renderResults() {
-
     renderCalendar();
-
     renderMoodTracker();
-
     renderHistory();
-
     renderActivityChart();
-
     renderScoreChart();
-
 }
 
 
@@ -1860,8 +857,5 @@ function renderResults() {
    INITIAL
 ===================================================== */
 
-dateInput.value =
-    getTodayString();
-
-
+dateInput.value = getTodayString();
 renderCalendar();
