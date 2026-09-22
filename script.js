@@ -6,12 +6,10 @@
 /* =====================================================
    DATA
 ===================================================== */
-const supabaseUrl = "YOUR_PROJECT_URL";
-const supabaseKey = "https://glyerpsfddglezsmcsos.supabase.co/rest/v1/";
+const supabaseUrl = "https://jdestfitkftlcswkugbi.supabase.co";
+const supabaseKey = "sb_publishable_Ll0WBClWb5OKYjcoBi6-4w_z7bV3qa3";
 
-const supabase = window.supabase.createClient(
-  supabaseUrl,
-  supabaseKey
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 );
 let healthData =
     JSON.parse(
@@ -414,7 +412,7 @@ function getDataByDate(
 
 form.addEventListener(
     "submit",
-    function(event) {
+    async function(event) {
 
         event.preventDefault();
 
@@ -591,7 +589,23 @@ form.addEventListener(
             );
 
         }
+try {
+  const { error } = await supabase
+    .from("daily_logs")
+    .upsert({
+      date: newData.date,
+      mood: newData.mood,
+      note: "",
+      reading: newData.reading,
+      exercise: newData.exercise,
+      exercise_type: newData.exerciseType,
+      score: newData.score
+    });
 
+  if (error) console.error(error);
+} catch (err) {
+  console.error(err);
+}
 
 
         saveData();
