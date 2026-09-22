@@ -10,7 +10,6 @@ const supabaseUrl = "https://jdestfitkftlcswkugbi.supabase.co";
 const supabaseKey = "sb_publishable_Ll0WBClWb5OKYjcoBi6-4w_z7bV3qa3";
 
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-);
 let healthData =
     JSON.parse(
         localStorage.getItem(
