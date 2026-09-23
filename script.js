@@ -70,7 +70,6 @@ let calendarMonth = now.getMonth();
 ===================================================== */
 authNavBtn.addEventListener("click", () => {
     if (currentUser) {
-        // Logout
         supabaseClient.auth.signOut();
     } else {
         authModal.classList.remove("hidden");
@@ -154,7 +153,6 @@ async function fetchHealthData() {
         return;
     }
 
-    // แปลงรูปแบบข้อมูลให้ตรงกับที่ App ใช้งาน
     healthData = data.map(item => ({
         id: item.id,
         date: item.date,
@@ -237,20 +235,31 @@ form.addEventListener("submit", async function(event) {
 
     const score = Number(scoreInput.value);
 
-    // Save to Supabase
+    // 1. ตรวจสอบว่าวันที่บันทึกนี้ เคยมีข้อมูลอยู่แล้วหรือไม่
+    const existingData = getDataByDate(date);
+
+    // 2. สร้างโครงสร้างข้อมูลสำหรับบันทึก
+    const payload = {
+        user_id: currentUser.id,
+        date: date,
+        mood: mood,
+        note: "",
+        reading: reading,
+        exercise: exercise,
+        exercise_type: exerciseType,
+        score: score
+    };
+
+    // ถ้าเคยบันทึกวันเดียวกันไปแล้ว ให้ส่ง id เดิมไปด้วย เพื่อสั่งให้อัปเดตข้อมูลแถวเดิม
+    if (existingData && existingData.id) {
+        payload.id = existingData.id;
+    }
+
+    // Save / Update to Supabase
     try {
         const { data, error } = await supabaseClient
             .from("daily_logs")
-            .upsert({
-                user_id: currentUser.id,
-                date: date,
-                mood: mood,
-                note: "",
-                reading: reading,
-                exercise: exercise,
-                exercise_type: exerciseType,
-                score: score
-            }, { onConflict: 'user_id, date' });
+            .upsert(payload);
 
         if (error) {
             alert("บันทึกไม่สำเร็จ: " + error.message);
