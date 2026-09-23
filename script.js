@@ -859,3 +859,60 @@ function renderResults() {
 
 dateInput.value = getTodayString();
 renderCalendar();
+// 1. กำหนดรายการถ้วยรางวัลทั้งหมด
+const BADGES_LIST = [
+    {
+        id: "first_log",
+        icon: "🌱",
+        title: "จุดเริ่มต้นเล็กๆ",
+        desc: "บันทึกข้อมูลสุขภาพครั้งแรก",
+        check: (data) => data.length >= 1
+    },
+    {
+        id: "reading_master",
+        icon: "📚",
+        title: "หนอนหนังสือ",
+        desc: "อ่านหนังสือสะสมครบ 300 นาที",
+        check: (data) => {
+            const total = data.reduce((sum, item) => sum + (Number(item.reading) || 0), 0);
+            return total >= 300;
+        }
+    },
+    {
+        id: "exercise_hero",
+        icon: "🏃",
+        title: "สายสตรอง",
+        desc: "ออกกำลังกายสะสมครบ 5 ครั้ง",
+        check: (data) => {
+            const count = data.filter(item => Number(item.exercise) > 0).length;
+            return count >= 5;
+        }
+    },
+    {
+        id: "streak_3",
+        icon: "🔥",
+        title: "ไฟแรงจัด",
+        desc: "บันทึกข้อมูลติดต่อกัน 3 วัน",
+        check: (data) => data.length >= 3
+    }
+];
+
+// 2. ฟังก์ชันวาดการ์ดเหรียญรางวัลลงบนหน้าเว็บ
+function renderBadges() {
+    const container = document.getElementById("badgesContainer");
+    if (!container) return;
+
+    container.innerHTML = BADGES_LIST.map(badge => {
+        // เช็กว่าผ่านเงื่อนไขการปลดล็อกหรือยัง
+        const isUnlocked = badge.check(healthData);
+        
+        return `
+            <div class="badge-card ${isUnlocked ? 'unlocked' : 'locked'}">
+                <div class="badge-icon">${badge.icon}</div>
+                <div class="badge-title">${badge.title}</div>
+                <div class="badge-desc">${badge.desc}</div>
+                <span class="badge-status">${isUnlocked ? '✅ ปลดล็อกแล้ว' : '🔒 ล็อกอยู่'}</span>
+            </div>
+        `;
+    }).join('');
+}
