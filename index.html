@@ -29,8 +29,51 @@
             <p class="small-title">MY LITTLE</p>
             <h1>Health Tracker 🌷</h1>
         </div>
-        <div class="header-flower">🌸</div>
+        <div class="user-control">
+            <span id="userStatus" class="user-status-text">ยังไม่ได้เข้าสู่ระบบ</span>
+            <button type="button" id="authNavBtn" class="auth-nav-btn">เข้าสู่ระบบ 💗</button>
+        </div>
     </header>
+
+    <!-- AUTH MODAL (POPUP) -->
+    <div id="authModal" class="modal-backdrop hidden">
+        <div class="modal-card">
+            <button type="button" id="closeAuthModal" class="close-modal-btn">✕</button>
+            
+            <div class="auth-tabs">
+                <button type="button" id="tabLogin" class="auth-tab active">เข้าสู่ระบบ</button>
+                <button type="button" id="tabRegister" class="auth-tab">สมัครสมาชิก</button>
+            </div>
+
+            <!-- LOGIN FORM -->
+            <form id="loginForm" class="auth-form">
+                <h2>ยินดีต้อนรับกลับมา 💕</h2>
+                <div class="form-group">
+                    <label for="loginEmail">📧 อีเมล</label>
+                    <input type="email" id="loginEmail" placeholder="yourname@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">🔒 รหัสผ่าน</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="save-button">เข้าสู่ระบบ ✨</button>
+            </form>
+
+            <!-- REGISTER FORM -->
+            <form id="registerForm" class="auth-form hidden">
+                <h2>สร้างบัญชีใหม่ 🌷</h2>
+                <div class="form-group">
+                    <label for="regEmail">📧 อีเมล</label>
+                    <input type="email" id="regEmail" placeholder="yourname@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">🔒 รหัสผ่าน (อย่างน้อย 6 ตัวอักษร)</label>
+                    <input type="password" id="regPassword" placeholder="••••••••" minlength="6" required>
+                </div>
+                <button type="submit" class="save-button">สมัครสมาชิก 💕</button>
+            </form>
+        </div>
+    </div>
 
     <!-- PAGE 1 : INPUT -->
     <main id="inputPage">
@@ -241,9 +284,7 @@
                     <p>ปลดล็อกความสำเร็จตามพฤติกรรมของคุณ</p>
                 </div>
             </div>
-            <div id="badgesContainer" class="badges-grid">
-                <!-- JS จะมาวาดเหรียญใส่ตรงนี้ -->
-            </div>
+            <div id="badgesContainer" class="badges-grid"></div>
         </section>
 
         <!-- HISTORY -->
@@ -269,7 +310,7 @@
     </footer>
 </div>
 
-<!-- โหลด Supabase SDK และ script.js อย่างละ 1 ครั้ง -->
+<!-- SDK & Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="script.js"></script>
 
