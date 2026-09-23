@@ -841,11 +841,12 @@ function renderScoreChart() {
 
 
 /* =====================================================
-   GAMIFICATION / BADGES SYSTEM
+   GAMIFICATION / BADGES SYSTEM (20 BADGES)
 ===================================================== */
 
-// 1. รายการถ้วยรางวัลทั้งหมด
+// 1. รายการถ้วยรางวัลทั้งหมด 20 รายการ
 const BADGES_LIST = [
+    // --- หมวด: เริ่มต้น & บันทึกทั่วไป ---
     {
         id: "first_log",
         icon: "🌱",
@@ -854,11 +855,80 @@ const BADGES_LIST = [
         check: (data) => data.length >= 1
     },
     {
+        id: "log_5",
+        icon: "🌿",
+        title: "ผู้เริ่มต้นจดบันทึก",
+        desc: "บันทึกข้อมูลสะสมครบ 5 วัน",
+        check: (data) => data.length >= 5
+    },
+    {
+        id: "log_10",
+        icon: "🌳",
+        title: "นักบันทึกประจำวัน",
+        desc: "บันทึกข้อมูลสะสมครบ 10 วัน",
+        check: (data) => data.length >= 10
+    },
+    {
+        id: "log_30",
+        icon: "🏆",
+        title: "เซียนบันทึกตัวจริง",
+        desc: "บันทึกข้อมูลสะสมครบ 30 วัน",
+        check: (data) => data.length >= 30
+    },
+
+    // --- หมวด: วินัยต่อเนื่อง (Streak) ---
+    {
+        id: "streak_3",
+        icon: "🔥",
+        title: "ไฟแรงจัด",
+        desc: "บันทึกข้อมูลติดต่อกัน 3 วันขึ้นไป",
+        check: (data) => data.length >= 3
+    },
+    {
+        id: "streak_7",
+        icon: "⚡",
+        title: "วินัยเหล็กไหล",
+        desc: "บันทึกข้อมูลสะสมครบ 7 วันขึ้นไป",
+        check: (data) => data.length >= 7
+    },
+
+    // --- หมวด: การอ่านหนังสือ 📚 ---
+    {
+        id: "reading_start",
+        icon: "📖",
+        title: "เริ่มก้าวแรกนักอ่าน",
+        desc: "อ่านหนังสือสะสมครบ 60 นาที (1 ชั่วโมง)",
+        check: (data) => data.reduce((sum, item) => sum + (Number(item.reading) || 0), 0) >= 60
+    },
+    {
         id: "reading_master",
         icon: "📚",
         title: "หนอนหนังสือ",
-        desc: "อ่านหนังสือสะสมครบ 300 นาที",
+        desc: "อ่านหนังสือสะสมครบ 300 นาที (5 ชั่วโมง)",
         check: (data) => data.reduce((sum, item) => sum + (Number(item.reading) || 0), 0) >= 300
+    },
+    {
+        id: "reading_god",
+        icon: "🎓",
+        title: "คลังปัญญาเดินได้",
+        desc: "อ่านหนังสือสะสมครบ 600 นาที (10 ชั่วโมง)",
+        check: (data) => data.reduce((sum, item) => sum + (Number(item.reading) || 0), 0) >= 600
+    },
+    {
+        id: "reading_marathon",
+        icon: "🕰️",
+        title: "นักอ่านมาราธอน",
+        desc: "อ่านหนังสือในวันเดียวเกิน 90 นาทีขึ้นไป",
+        check: (data) => data.some(item => Number(item.reading) >= 90)
+    },
+
+    // --- หมวด: การออกกำลังกาย 🏃 ---
+    {
+        id: "exercise_start",
+        icon: "👟",
+        title: "เริ่มขยับร่างกาย",
+        desc: "ออกกำลังกายสะสมครบ 1 ครั้ง",
+        check: (data) => data.filter(item => Number(item.exercise) > 0).length >= 1
     },
     {
         id: "exercise_hero",
@@ -868,18 +938,66 @@ const BADGES_LIST = [
         check: (data) => data.filter(item => Number(item.exercise) > 0).length >= 5
     },
     {
-        id: "streak_3",
-        icon: "🔥",
-        title: "ไฟแรงจัด",
-        desc: "บันทึกข้อมูลติดต่อกัน 3 วันขึ้นไป",
-        check: (data) => data.length >= 3
+        id: "exercise_champion",
+        icon: "🥇",
+        title: "ยอดนักแอธเลติก",
+        desc: "ออกกำลังกายสะสมครบ 10 ครั้ง",
+        check: (data) => data.filter(item => Number(item.exercise) > 0).length >= 10
     },
+    {
+        id: "exercise_time_master",
+        icon: "💪",
+        title: "เบิร์นแคลอรี",
+        desc: "ออกกำลังกายสะสมรวมครบ 300 นาที",
+        check: (data) => data.reduce((sum, item) => sum + (Number(item.exercise) || 0), 0) >= 300
+    },
+
+    // --- หมวด: อารมณ์ & ความสุข 🥰 ---
     {
         id: "happy_vibe",
         icon: "🥰",
         title: "วันแสนสดใส",
         desc: "บันทึกอารมณ์ 'ดีมาก' สะสมครบ 3 ครั้ง",
         check: (data) => data.filter(item => item.mood === "ดีมาก").length >= 3
+    },
+    {
+        id: "good_mood_master",
+        icon: "🌈",
+        title: "พลังบวกเต็มเปี่ยม",
+        desc: "บันทึกอารมณ์ 'ดี' หรือ 'ดีมาก' รวมกันครบ 7 ครั้ง",
+        check: (data) => data.filter(item => item.mood === "ดี" || item.mood === "ดีมาก").length >= 7
+    },
+    {
+        id: "embrace_sadness",
+        icon: "🤍",
+        title: "ยอมรับความรู้สึก",
+        desc: "บันทึกอารมณ์เศร้าหรือเหนื่อย (การเปิดรับอารมณ์ตัวเองอย่างจริงใจ)",
+        check: (data) => data.some(item => item.mood === "เศร้า" || item.mood === "เหนื่อย")
+    },
+
+    // --- หมวด: คะแนนประเมินตนเอง ⭐ ---
+    {
+        id: "perfect_score",
+        icon: "🌟",
+        title: "วันที่สมบูรณ์แบบ",
+        desc: "ให้คะแนนตัวเอง 10/10 ในวันใดวันหนึ่ง",
+        check: (data) => data.some(item => Number(item.score) === 10)
+    },
+    {
+        id: "high_score_streak",
+        icon: "✨",
+        title: "ช่วงเวลาดีๆ",
+        desc: "ให้คะแนนตัวเอง 8 ขึ้นไป สะสมครบ 5 ครั้ง",
+        check: (data) => data.filter(item => Number(item.score) >= 8).length >= 5
+    },
+
+    // --- หมวด: ความสมดุลชีวิต (Balanced Life) ⚖️ ---
+    {
+        id: "balanced_day",
+        icon: "☯️",
+        title: "ชีวิตสมดุล",
+        desc: "ในวันเดียว มีทั้งอ่านหนังสือ (30+ นาที) และออกกำลังกาย (30+ นาที)",
+        check: (data) => data.some(item => Number(item.reading) >= 30 && Number(item.exercise) >= 30)
     }
 ];
 
@@ -942,7 +1060,7 @@ function renderResults() {
     renderHistory();
     renderActivityChart();
     renderScoreChart();
-    renderBadges(); // 👈 เพิ่มการเรียกใช้วาดถ้วยรางวัลตรงนี้
+    renderBadges(); // เรียกใช้วาดถ้วยรางวัล
 }
 
 
