@@ -1879,3 +1879,72 @@ footer {
     font-size: 0.7rem;
     font-weight: bold;
 }
+/* BADGES SECTION STYLES */
+.badges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.badge-card {
+    padding: 14px 8px;
+    border-radius: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    user-select: none;
+}
+
+.badge-card:hover {
+    transform: translateY(-3px);
+}
+
+/* ตอนยังไม่ปลดล็อก (สีเทาแบบพรีเมียม) */
+.badge-card.locked {
+    background: #f3f4f6;
+    border: 2px dashed #d1d5db;
+    opacity: 0.6;
+    filter: grayscale(100%);
+}
+
+.badge-card.locked .badge-icon {
+    font-size: 1.8rem;
+    filter: opacity(0.5);
+}
+
+.badge-card.locked .badge-title {
+    color: #6b7280;
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+/* ตอนปลดล็อกแล้ว (สีสันสดใส) */
+.badge-card.unlocked {
+    background: #f0fdf4;
+    border: 2px solid #86efac;
+    box-shadow: 0 4px 12px rgba(134, 239, 172, 0.3);
+}
+
+.badge-card.unlocked .badge-icon {
+    font-size: 2.2rem;
+}
+
+.badge-card.unlocked .badge-title {
+    color: #166534;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+.badge-status-tag {
+    display: block;
+    font-size: 0.65rem;
+    margin-top: 6px;
+    color: #6b7280;
+}
+
+.badge-card.unlocked .badge-status-tag {
+    color: #15803d;
+    font-weight: 500;
+}
