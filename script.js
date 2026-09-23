@@ -714,6 +714,7 @@ clearAllButton.addEventListener("click", () => {
 
     healthData = [];
     localStorage.removeItem("healthTrackerData");
+    localStorage.removeItem("unlockedBadgeIds");
 
     form.reset();
     scoreInput.value = 5;
@@ -840,26 +841,6 @@ function renderScoreChart() {
 
 
 /* =====================================================
-   RENDER RESULTS
-===================================================== */
-
-function renderResults() {
-    renderCalendar();
-    renderMoodTracker();
-    renderHistory();
-    renderActivityChart();
-    renderScoreChart();
-}
-
-
-
-/* =====================================================
-   INITIAL
-===================================================== */
-
-dateInput.value = getTodayString();
-renderCalendar();
-/* =====================================================
    GAMIFICATION / BADGES SYSTEM
 ===================================================== */
 
@@ -948,3 +929,27 @@ function showBadgeDetail(title, desc, icon, isUnlocked) {
     const statusText = isUnlocked ? "✅ ปลดล็อกเรียบร้อยแล้ว!" : "🔒 วิธีการปลดล็อก:";
     alert(`${icon} ${title}\n\n${statusText}\n${desc}`);
 }
+
+
+
+/* =====================================================
+   RENDER RESULTS
+===================================================== */
+
+function renderResults() {
+    renderCalendar();
+    renderMoodTracker();
+    renderHistory();
+    renderActivityChart();
+    renderScoreChart();
+    renderBadges(); // 👈 เพิ่มการเรียกใช้วาดถ้วยรางวัลตรงนี้
+}
+
+
+
+/* =====================================================
+   INITIAL
+===================================================== */
+
+dateInput.value = getTodayString();
+renderCalendar();
