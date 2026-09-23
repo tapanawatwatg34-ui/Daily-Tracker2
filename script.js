@@ -210,12 +210,16 @@ function getDataByDate(dateString) {
 form.addEventListener("submit", async function(event) {
     event.preventDefault();
 
-    if (!currentUser) {
+    // 1. ดึง session ปัจจุบันให้มั่นใจว่าล็อกอินอยู่
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    
+    if (!session || !session.user) {
         alert("กรุณาเข้าสู่ระบบก่อนบันทึกข้อมูลนะครับ 💗");
         authModal.classList.remove("hidden");
         return;
     }
 
+    const userId = session.user.id;
     const date = dateInput.value;
     const mood = document.querySelector('input[name="mood"]:checked')?.value;
     const reading = Number(readingInput.value);
@@ -235,12 +239,11 @@ form.addEventListener("submit", async function(event) {
 
     const score = Number(scoreInput.value);
 
-    // 1. ตรวจสอบว่าวันที่บันทึกนี้ เคยมีข้อมูลอยู่แล้วหรือไม่
+    // 2. เช็กว่าวันเดิมมีข้อมูลอยู่ในระบบแล้วหรือไม่
     const existingData = getDataByDate(date);
 
-    // 2. สร้างโครงสร้างข้อมูลสำหรับบันทึก
     const payload = {
-        user_id: currentUser.id,
+        user_id: userId,
         date: date,
         mood: mood,
         note: "",
@@ -250,19 +253,27 @@ form.addEventListener("submit", async function(event) {
         score: score
     };
 
-    // ถ้าเคยบันทึกวันเดียวกันไปแล้ว ให้ส่ง id เดิมไปด้วย เพื่อสั่งให้อัปเดตข้อมูลแถวเดิม
-    if (existingData && existingData.id) {
-        payload.id = existingData.id;
-    }
-
-    // Save / Update to Supabase
     try {
-        const { data, error } = await supabaseClient
-            .from("daily_logs")
-            .upsert(payload);
+        let errorResult = null;
 
-        if (error) {
-            alert("บันทึกไม่สำเร็จ: " + error.message);
+        if (existingData && existingData.id) {
+            // วันเดิม: ใช้คำสั่ง UPDATE แบบระบุ id เพื่อหลีกเลี่ยง RLS / Primary Key Violation
+            const { error } = await supabaseClient
+                .from("daily_logs")
+                .update(payload)
+                .eq("id", existingData.id);
+            errorResult = error;
+        } else {
+            // วันใหม่: ใช้คำสั่ง INSERT
+            const { error } = await supabaseClient
+                .from("daily_logs")
+                .insert([payload]);
+            errorResult = error;
+        }
+
+        if (errorResult) {
+            console.error("Supabase Error:", errorResult);
+            alert("บันทึกไม่สำเร็จ: " + errorResult.message);
             return;
         }
 
