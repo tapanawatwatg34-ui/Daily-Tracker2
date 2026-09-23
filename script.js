@@ -859,13 +859,17 @@ function renderResults() {
 
 dateInput.value = getTodayString();
 renderCalendar();
-// 1. กำหนดรายการถ้วยรางวัลทั้งหมด
+/* =====================================================
+   GAMIFICATION / BADGES SYSTEM
+===================================================== */
+
+// 1. รายการถ้วยรางวัลทั้งหมด
 const BADGES_LIST = [
     {
         id: "first_log",
         icon: "🌱",
         title: "จุดเริ่มต้นเล็กๆ",
-        desc: "บันทึกข้อมูลสุขภาพครั้งแรก",
+        desc: "บันทึกข้อมูลสุขภาพครั้งแรกสำเร็จ",
         check: (data) => data.length >= 1
     },
     {
@@ -873,46 +877,74 @@ const BADGES_LIST = [
         icon: "📚",
         title: "หนอนหนังสือ",
         desc: "อ่านหนังสือสะสมครบ 300 นาที",
-        check: (data) => {
-            const total = data.reduce((sum, item) => sum + (Number(item.reading) || 0), 0);
-            return total >= 300;
-        }
+        check: (data) => data.reduce((sum, item) => sum + (Number(item.reading) || 0), 0) >= 300
     },
     {
         id: "exercise_hero",
         icon: "🏃",
         title: "สายสตรอง",
         desc: "ออกกำลังกายสะสมครบ 5 ครั้ง",
-        check: (data) => {
-            const count = data.filter(item => Number(item.exercise) > 0).length;
-            return count >= 5;
-        }
+        check: (data) => data.filter(item => Number(item.exercise) > 0).length >= 5
     },
     {
         id: "streak_3",
         icon: "🔥",
         title: "ไฟแรงจัด",
-        desc: "บันทึกข้อมูลติดต่อกัน 3 วัน",
+        desc: "บันทึกข้อมูลติดต่อกัน 3 วันขึ้นไป",
         check: (data) => data.length >= 3
+    },
+    {
+        id: "happy_vibe",
+        icon: "🥰",
+        title: "วันแสนสดใส",
+        desc: "บันทึกอารมณ์ 'ดีมาก' สะสมครบ 3 ครั้ง",
+        check: (data) => data.filter(item => item.mood === "ดีมาก").length >= 3
     }
 ];
 
-// 2. ฟังก์ชันวาดการ์ดเหรียญรางวัลลงบนหน้าเว็บ
+// เก็บ ID ของ Badge ที่ปลดล็อกไปแล้วเพื่อเช็กแจ้งเตือน
+let unlockedBadgeIds = JSON.parse(localStorage.getItem("unlockedBadgeIds") || "[]");
+
+// 2. ฟังก์ชันแสดงผลและเช็กปลดล็อก Badges
 function renderBadges() {
     const container = document.getElementById("badgesContainer");
     if (!container) return;
 
+    let newlyUnlocked = [];
+
     container.innerHTML = BADGES_LIST.map(badge => {
-        // เช็กว่าผ่านเงื่อนไขการปลดล็อกหรือยัง
         const isUnlocked = badge.check(healthData);
-        
+
+        // เช็กว่าเป็นถ้วยใหม่ที่เพิ่งปลดล็อกได้หรือไม่
+        if (isUnlocked && !unlockedBadgeIds.includes(badge.id)) {
+            newlyUnlocked.push(badge);
+            unlockedBadgeIds.push(badge.id);
+        }
+
         return `
-            <div class="badge-card ${isUnlocked ? 'unlocked' : 'locked'}">
+            <div class="badge-card ${isUnlocked ? 'unlocked' : 'locked'}" onclick="showBadgeDetail('${badge.title}', '${badge.desc}', '${badge.icon}', ${isUnlocked})">
                 <div class="badge-icon">${badge.icon}</div>
                 <div class="badge-title">${badge.title}</div>
-                <div class="badge-desc">${badge.desc}</div>
-                <span class="badge-status">${isUnlocked ? '✅ ปลดล็อกแล้ว' : '🔒 ล็อกอยู่'}</span>
+                <span class="badge-status-tag">${isUnlocked ? '✅ ปลดล็อกแล้ว' : '🔒 ล็อกอยู่'}</span>
             </div>
         `;
     }).join('');
+
+    // บันทึก ID ที่ปลดล็อกแล้วลง LocalStorage
+    localStorage.setItem("unlockedBadgeIds", JSON.stringify(unlockedBadgeIds));
+
+    // ถ้ามีถ้วยรางวัลใหม่ที่เพิ่งปลดล็อก ให้ขึ้นแจ้งเตือนยินดี
+    if (newlyUnlocked.length > 0) {
+        newlyUnlocked.forEach(badge => {
+            setTimeout(() => {
+                alert(`🎉 ยินดีด้วย! คุณได้รับถ้วยรางวัลใหม่:\n\n${badge.icon} ${badge.title}\n"${badge.desc}"`);
+            }, 500);
+        });
+    }
+}
+
+// 3. ฟังก์ชันสำหรับกดดูเงื่อนไขถ้วยรางวัล
+function showBadgeDetail(title, desc, icon, isUnlocked) {
+    const statusText = isUnlocked ? "✅ ปลดล็อกเรียบร้อยแล้ว!" : "🔒 วิธีการปลดล็อก:";
+    alert(`${icon} ${title}\n\n${statusText}\n${desc}`);
 }
